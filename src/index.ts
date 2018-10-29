@@ -1,5 +1,6 @@
 import bodyParser from "body-parser";
 import express from "express";
+import htmlToText from "html2plaintext";
 import mongoose from "mongoose";
 import { WordCounter } from "./controllers/WordCounter";
 import { Filter } from "./filters/Filter";
@@ -10,7 +11,6 @@ import { HttpService } from "./services/http.service";
 import { Logger } from "./services/logging.service";
 import { Processor } from "./services/processor.service";
 import { WordProcessor } from "./services/wordprocessor.service";
-
 class Server {
     // starting Port
     private readonly _port = process.env.PORT || 8080;
@@ -28,18 +28,23 @@ class Server {
         this._logger.log("starting application..");
 
         // connect to db
-        await mongoose.connect(this._connectionString, {useNewUrlParser: true});
+        await mongoose.connect(this._connectionString, { useNewUrlParser: true });
 
-        // map routes
-        const htmlFilter = new Filter(/<[^>]*>/g, "");
-        const specialtags = new Filter(/[&\/\\#,+()$~%.'":*?<>{}!-';_]/g, "");
+        // add filters
+        const html_text = (arg: string) => htmlToText(arg);
+        const html2textFilter = new Filter(html_text);
+        const specialtags = new Filter(/[&\/\\#,+\(\)$~%.'":*?<>{}!-';_\[\]=]/g, "");
 
+        // processor instance
         const processor = new Processor(new HttpService(),
-            new WordProcessor([htmlFilter, specialtags]),
+            () => new WordProcessor([html2textFilter, specialtags]),
             new SearchService(Search));
 
+        // create routes and map to controller
         const controller = new WordCounter(this._logger, processor);
         this._app.post("/wordcount", controller.count.bind(controller));
+
+        // run server
         this._app.listen(this._port, (error: any) => {
             if (error) {
                 this._logger.error(error);
@@ -51,6 +56,7 @@ class Server {
     }
 }
 
+// start applications
 new Server(express(), [(app: express.Application) => {
 
     app.use(bodyParser.urlencoded({ extended: true }));

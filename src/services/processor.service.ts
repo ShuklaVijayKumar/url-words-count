@@ -3,9 +3,9 @@ import { HttpService } from "./http.service";
 import { WordProcessor } from "./wordprocessor.service";
 
 export class Processor {
-    private _processes = [];
+
     constructor(private _networkService: HttpService,
-                private _wordProcessor: WordProcessor,
+                private _wordProcessor: () => WordProcessor,
                 private _searchDataService: SearchService) {
     }
 
@@ -13,10 +13,16 @@ export class Processor {
 
         try {
             const result = await this._networkService.Get(url);
+            // get instance of word processor per request
+            const wordprocessor = this._wordProcessor();
             if (result.success) {
+                // breakdown text to array of lines
                 const lines: string[] = result.data.split(/[\r\n]+/);
-                lines.forEach((element) => this._wordProcessor.processLine(element.toLowerCase()));
-                const results =  this._wordProcessor.getResult();
+                // process each line
+                lines.forEach((element) => wordprocessor.processLine(element.toLowerCase()));
+                // get result
+                const results =  wordprocessor.getResult();
+                // return result
                 return await this._searchDataService.create({ url, results });
             }
         } catch (error) {

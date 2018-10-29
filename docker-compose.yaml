@@ -6,10 +6,17 @@ services:
     - "8080:8080"
     environment: 
     - "PORT=8080"
-    - "MONGOURL=mongodb://mongodb:27017"
+    - "MONGOURL=mongodb://mongo:27017"
     restart: always
     links:
     - mongo
+    - client
+  client:
+    build:
+      context: .
+      dockerfile: ./src/client/Dockerfile
+    ports:
+      - "3000:3000"
   mongo:
     image: mongo
     ports: 

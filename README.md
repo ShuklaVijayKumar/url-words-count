@@ -27,21 +27,20 @@ Clone this repo on your local machine and navigate to application root directory
 And repeat
 
 ```
-run docker-compose-up mongo
-run docker-compose-up web
+run docker-compose up 
 ```
 
 ## Running the tests
 
-run npm run test
+run ->  npm run test
 
 ## Built 
 
-run npm run build
+run -> npm run build
 
 ## Start
 
-run npm run start
+Browse to localhost:3000/
 
 ## Pending items
 Password authentication from DB.
