@@ -47,3 +47,9 @@ Password authentication from DB.
 
 
 Need to create a Keys/Keys.js under src to match the password.
+
+
+UI testing
+
+
+Page 2 functionality to ready total search statistics 
