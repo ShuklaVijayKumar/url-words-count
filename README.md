@@ -18,7 +18,7 @@ VS Code or any other code editor
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+***Steps***
 
 ```
 Clone this repo on your local machine and navigate to application root directory
@@ -44,4 +44,4 @@ run npm run build
 run npm run start
 
 ## Pending items
-
+Password authentication from DB
