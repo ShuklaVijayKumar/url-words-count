@@ -3,42 +3,43 @@ import { makeData } from "./utils";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Prompt from "./Prompt";
+import Keys from "../Keys/Keys";
 
 class Stats extends React.Component {
   constructor() {
     super();
     this.state = {
-      isAuthenticated: false,
+      isAuthenticated: undefined,
       data: makeData()
     };
   }
 
   myCallback = dataFromChild => {
-    if (dataFromChild === "Password") {
-      console.log("passed");  
+    if (dataFromChild === Keys.PASSWORD) {
       this.setState({
-        isAuthenticated: true,
-        data: makeData()
+        isAuthenticated: true
+      });
+    } else {
+      this.setState({
+        isAuthenticated: false
       });
     }
   };
 
- 
-
   render() {
-    if (!this.state.isAuthenticated) {
+    if (typeof this.state.isAuthenticated === "undefined") {
       return (
         <div className="static-modal">
           <Prompt callback={this.myCallback} />
         </div>
       );
     }
+    if (this.state.isAuthenticated === false) {
+      return <div>User unauthorised !!</div>;
+    }
     const { data } = this.state;
     return (
-      <div
-        style={{ width: 500, textAlign: "center", flow: "center" }}
-        id="contact"
-      >
+      <div style={{ textAlign: "center", flow: "center" }} id="contact">
         <div>
           <ReactTable
             data={data}
@@ -48,13 +49,20 @@ class Stats extends React.Component {
                   {
                     Header: "Word",
                     accessor: "Word",
-                    maxWidth: 200
+                    Cell: props => (
+                      <div
+                        style={{
+                          fontSize: `${props.original.Occurance}` + "px"
+                        }}
+                      >
+                        {props.original.Word}
+                      </div>
+                    )
                   },
                   {
                     Header: "Occurance",
                     id: "Occurance",
-                    accessor: d => d.Occurance,
-                    maxWidth: 200
+                    accessor: d => d.Occurance
                   }
                 ]
               }
@@ -65,7 +73,7 @@ class Stats extends React.Component {
                 desc: true
               }
             ]}
-            defaultPageSize={50}
+            defaultPageSize={100}
             className="-striped -highlight"
           />
         </div>
