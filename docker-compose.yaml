@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+    - "8080:8080"
+    environment: 
+    - "PORT=8080"
+    - "MONGOURL=mongodb://mongodb:27017"
+    restart: always
+    links:
+    - mongo
+  mongo:
+    image: mongo
+    ports: 
+    - "27017:27017"
