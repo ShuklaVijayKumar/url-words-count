@@ -1,54 +1,60 @@
 import React from "react";
-import Prompt from "./Prompt";
-import Keys from "../Keys/Keys";
-import Stats from "./Stats";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
-class Page2 extends React.Component {
-  constructor() {
-    super();
+class Stats extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       isAuthenticated: undefined
     };
-  }
-
-  myCallback = dataFromChild => {
-    if (dataFromChild === Keys.PASSWORD) {
-      console.log('1');
-      fetch("https://jsonplaceholder.typicode.com/albums")
-        .then(response => response.json())
-        .then(data => this.setState({ isAuthenticated: true, data: data }));
-    } else {
-      this.setState({
-        isAuthenticated: false
-      });
-    }
-  };
-
-  componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/albums")
-      .then(response => response.json())
-      .then(data => this.setState({ submitted: true, data: data }));
-    //console.log(this.state.data);
-    //event.preventDefault();
-  }
+  } 
 
   render() {
-    if (typeof this.state.isAuthenticated === "undefined") {
-      return (
-        <div className="static-modal">
-          <Prompt callback={this.myCallback} />
-        </div>
-      );
-    }
-    if (this.state.isAuthenticated === false) {
-      return <div>User unauthorised !!</div>;
-    }
+    const data = this.props.result;
+    //console.log("result", this.props.result);
     return (
-      <div>
-        <Stats result={this.state.data}/>
+      <div style={{ textAlign: "center", flow: "center" }} id="contact">
+        <div>
+          <ReactTable
+            data={data}
+            columns={[
+              {
+                columns: [
+                  {
+                    Header: "Word",
+                    accessor: "title",
+                    Cell: props => (
+                      <div
+                        style={{
+                          fontSize: `${props.original.userId}` + "px"
+                        }}
+                      >
+                        {props.original.title}
+                      </div>
+                    )
+                  },
+                  {
+                    Header: "Occurance",
+                    id: "userId",
+                    accessor: d => d.userId
+                  }
+                ]
+              }
+            ]}
+            defaultSorted={[
+              {
+                id: "userId",
+                desc: true
+              }
+            ]}
+            defaultPageSize={100}
+            className="-striped -highlight"
+          />
+        </div>
       </div>
     );
   }
 }
 
-export default Page2;
+export default Stats;
