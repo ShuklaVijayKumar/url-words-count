@@ -15,28 +15,28 @@ class Stats extends React.Component {
                 columns: [
                   {
                     Header: "Word",
-                    accessor: "title",
+                    accessor: "word",
                     Cell: props => (
                       <div
                         style={{
-                          fontSize: `${props.original.userId} px`
+                          fontSize: `${props.original.count} px`
                         }}
                       >
-                        {props.original.title}
+                        {props.original.word}
                       </div>
                     )
                   },
                   {
-                    Header: "Occurance",
-                    id: "userId",
-                    accessor: d => d.userId
+                    Header: "Count",
+                    id: "count",
+                    accessor: d => d.count
                   }
                 ]
               }
             ]}
             defaultSorted={[
               {
-                id: "userId",
+                id: "count",
                 desc: true
               }
             ]}

@@ -29,12 +29,13 @@ class Page1 extends React.Component {
       .then(res => res.json())
       .then(response => {
         const results = response.results;
-        console.log(Object.keys(results).map(key => {
+        const data = Object.keys(results).map(key => {
           return {
             count: results[key].count,
             word: key
           };
-        }));
+        });
+        this.setState({ isAuthenticated: true, data });
       })
       .catch(error => console.error("Error:", error));
     event.preventDefault();

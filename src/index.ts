@@ -39,7 +39,7 @@ class Server {
     const html_text = (arg: string) => htmlToText(arg);
     const html2textFilter = new Filter(html_text);
     const specialtags = new Filter(
-      /[&\/\\#,+\(\)$~%.'":*?<>{}!-';_\[\]=]/g,
+      /[0-9&\/\\#,+\(\)$~%.'":*?<>{}!-';_\[\]=]/g,
       ""
     );
 
