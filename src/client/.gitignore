@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 /configuration
-/src/Keys
+
 
 # testing
 /coverage

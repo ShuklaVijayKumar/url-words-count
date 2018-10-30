@@ -1,3 +1,3 @@
 export default {
-    PASSWORD: 'Password'
+    PASSWORD: 'Password' 
 }
