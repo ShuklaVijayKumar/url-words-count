@@ -4,6 +4,12 @@ import Stats from "./Stats";
 class Page1 extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    this.url = "localhost:8080/wordcount";
+    this.payload = {
+      url:
+        "http://www.loyalbooks.com/download/text/Railway-Children-by-E-Nesbit.txt"
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
@@ -16,9 +22,16 @@ class Page1 extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch("https://jsonplaceholder.typicode.com/albums")
-      .then(response => response.json())
-      .then(data => this.setState({ submitted:true, data:data }));
+    fetch(this.url, {
+      method: "POST", // or 'PUT'
+      body: {url: event.target.elements.urlText.value}, // data can be `string` or {object}!
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(response => JSON.stringify(response))
+      .catch(error => console.error("Error:", error));
     event.preventDefault();
   }
 
@@ -38,14 +51,16 @@ class Page1 extends React.Component {
                 type="text"
                 className="form-control"
                 id="urlText"
-                placeholder="https://en.wikipedia.org/wiki/WisdomTree_Investments"
+                value="http://www.loyalbooks.com/download/text/Railway-Children-by-E-Nesbit.txt"
+                placeholder="some url"
+                onChange={this.handleChange}
               />
             </div>
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
             <div>
-              <Stats result={this.state.data}/>
+              <Stats result={this.state.data} />
             </div>
           </form>
         </div>

@@ -12,54 +12,76 @@ import { Logger } from "./services/logging.service";
 import { Processor } from "./services/processor.service";
 import { WordProcessor } from "./services/wordprocessor.service";
 class Server {
-    // starting Port
-    private readonly _port = process.env.PORT || 8080;
-    private readonly _connectionString = process.env.MONGOURL || "mongodb://localhost:27017";
+  // starting Port
+  private readonly _port = process.env.PORT || 8080;
+  private readonly _connectionString =
+    process.env.MONGOURL || "mongodb://localhost:27017";
 
-    constructor(private _app: express.Application,
-                private _middlewares: Array<(e: express.Application) => void>,
-                private _logger: ILogger) {
-        // adding middlewares
-        _middlewares.forEach((middleware) => middleware(_app));
-    }
+  constructor(
+    private _app: express.Application,
+    private _middlewares: Array<(e: express.Application) => void>,
+    private _logger: ILogger
+  ) {
+    // adding middlewares
+    _middlewares.forEach(middleware => middleware(_app));
+  }
 
-    public async start(): Promise<void> {
+  public async start(): Promise<void> {
+    this._logger.log("starting application..");
 
-        this._logger.log("starting application..");
+    // connect to db
+    await mongoose.connect(
+      this._connectionString,
+      { useNewUrlParser: true }
+    );
 
-        // connect to db
-        await mongoose.connect(this._connectionString, { useNewUrlParser: true });
+    // add filters
+    const html_text = (arg: string) => htmlToText(arg);
+    const html2textFilter = new Filter(html_text);
+    const specialtags = new Filter(
+      /[&\/\\#,+\(\)$~%.'":*?<>{}!-';_\[\]=]/g,
+      ""
+    );
 
-        // add filters
-        const html_text = (arg: string) => htmlToText(arg);
-        const html2textFilter = new Filter(html_text);
-        const specialtags = new Filter(/[&\/\\#,+\(\)$~%.'":*?<>{}!-';_\[\]=]/g, "");
+    // processor instance
+    const processor = new Processor(
+      new HttpService(),
+      () => new WordProcessor([html2textFilter, specialtags]),
+      new SearchService(Search)
+    );
 
-        // processor instance
-        const processor = new Processor(new HttpService(),
-            () => new WordProcessor([html2textFilter, specialtags]),
-            new SearchService(Search));
+    // create routes and map to controller
+    const controller = new WordCounter(this._logger, processor);
+    this._app.post("/wordcount", controller.count.bind(controller));
 
-        // create routes and map to controller
-        const controller = new WordCounter(this._logger, processor);
-        this._app.post("/wordcount", controller.count.bind(controller));
+    // run server
+    this._app.listen(this._port, (error: any) => {
+      if (error) {
+        this._logger.error(error);
+        process.exit(1);
+      }
 
-        // run server
-        this._app.listen(this._port, (error: any) => {
-            if (error) {
-                this._logger.error(error);
-                process.exit(1);
-            }
-
-            this._logger.info(`application listening on port ${this._port}`);
-        });
-    }
+      this._logger.info(`application listening on port ${this._port}`);
+    });
+  }
 }
 
 // start applications
-new Server(express(), [(app: express.Application) => {
-
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-
-}], new Logger(console)).start();
+new Server(
+  express(),
+  [
+    (app: express.Application) => {
+      app.use(bodyParser.urlencoded({ extended: true }));
+      app.use(bodyParser.json());
+      app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header(
+          "Access-Control-Allow-Headers",
+          "Origin, X-Requested-With, Content-Type, Accept"
+        );
+        next();
+      });
+    }
+  ],
+  new Logger(console)
+).start();

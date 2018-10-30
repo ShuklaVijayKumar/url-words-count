@@ -10,7 +10,13 @@ services:
     restart: always
     links:
     - mongo
- 
+    - client
+  client:
+    build:
+      context: .
+      dockerfile: ./src/client/Dockerfile
+    ports:
+      - "3000:3000"
   mongo:
     image: mongo
     ports: 
