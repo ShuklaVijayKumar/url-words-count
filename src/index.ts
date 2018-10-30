@@ -73,7 +73,7 @@ new Server(
     (app: express.Application) => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
-      app.use(function(req, res, next) {
+      app.use((req: express.Request, res: express.Response, next: any) => {
         res.header("Access-Control-Allow-Origin", "*");
         res.header(
           "Access-Control-Allow-Headers",
