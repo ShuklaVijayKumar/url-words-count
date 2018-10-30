@@ -45,10 +45,6 @@ Browse to localhost:3000/
 ## Pending items
 Password authentication from DB.
 
-
-Need to create a Keys/Keys.js under src to match the password.
-
-
 UI testing
 
 

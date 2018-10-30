@@ -1,6 +1,6 @@
 import React from "react";
 import Prompt from "./Prompt";
-import Keys from "../Keys/Keys";
+import Keys from "../Keys";
 import Stats from "./Stats";
 
 class Page2 extends React.Component {
