@@ -1,20 +1,18 @@
 import React from "react";
 import Prompt from "./Prompt";
 import Keys from "../Keys/Keys";
-import Stats from "./Page2";
+import Stats from "./Stats";
 
 class Page2 extends React.Component {
   constructor() {
     super();
     this.state = {
-      isAuthenticated: undefined
+      isAuthenticated: false
     };
   }
 
   myCallback = dataFromChild => {
-    console.log('1');
     if (dataFromChild === Keys.PASSWORD) {
-      console.log('2');
       fetch("https://jsonplaceholder.typicode.com/albums")
         .then(response => response.json())
         .then(data => this.setState({ isAuthenticated: true, data: data }));
@@ -26,7 +24,7 @@ class Page2 extends React.Component {
   };
 
   render() {
-    if (typeof this.state.isAuthenticated === "undefined") {
+    if (this.state.isAuthenticated === false) {
       return (
         <div className="static-modal">
           <Prompt callback={this.myCallback} />

@@ -19,7 +19,6 @@ class Page1 extends React.Component {
     fetch("https://jsonplaceholder.typicode.com/albums")
       .then(response => response.json())
       .then(data => this.setState({ submitted:true, data:data }));
-      //console.log(this.state.data);
     event.preventDefault();
   }
 

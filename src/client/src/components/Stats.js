@@ -3,16 +3,8 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 class Stats extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isAuthenticated: undefined
-    };
-  } 
-
   render() {
     const data = this.props.result;
-    //console.log("result", this.props.result);
     return (
       <div style={{ textAlign: "center", flow: "center" }} id="contact">
         <div>
