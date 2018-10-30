@@ -19,7 +19,7 @@ class Stats extends React.Component {
                     Cell: props => (
                       <div
                         style={{
-                          fontSize: `${props.original.userId}` + "px"
+                          fontSize: `${props.original.userId} px`
                         }}
                       >
                         {props.original.title}
