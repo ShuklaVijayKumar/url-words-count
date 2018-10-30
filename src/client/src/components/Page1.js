@@ -5,11 +5,8 @@ class Page1 extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.url = "localhost:8080/wordcount";
-    this.payload = {
-      url:
-        "http://www.loyalbooks.com/download/text/Railway-Children-by-E-Nesbit.txt"
-    };
+    this.url = "http://localhost:8080/wordcount";
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
@@ -24,13 +21,21 @@ class Page1 extends React.Component {
   handleSubmit(event) {
     fetch(this.url, {
       method: "POST", // or 'PUT'
-      body: {url: event.target.elements.urlText.value}, // data can be `string` or {object}!
+      body: JSON.stringify({ url: event.target.elements.urlText.value }), // data can be `string` or {object}!
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
-      .then(response => JSON.stringify(response))
+      .then(response => {
+        const results = response.results;
+        console.log(Object.keys(results).map(key => {
+          return {
+            count: results[key].count,
+            word: key
+          };
+        }));
+      })
       .catch(error => console.error("Error:", error));
     event.preventDefault();
   }

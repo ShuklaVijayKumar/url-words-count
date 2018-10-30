@@ -25,7 +25,7 @@ describe("Wordprocessor tests", () => {
 
         // mock get
         networkService.Get = sinon.stub().resolves({ data: testData, success: true });
-        processor = new Processor(networkService, wordProcessor, dataService);
+        processor = new Processor(networkService, () => wordProcessor, dataService);
     });
 
     it.only("should process correctly", async () => {
