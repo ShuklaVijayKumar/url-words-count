@@ -7,10 +7,10 @@ function Header() {
     <Wrapper>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/">Page1</Link>
         </li>
         <li>
-          <Link to="/Stats">Page Data</Link>
+          <Link to="/Page2">Page2</Link>
         </li>
       </ul>
     </Wrapper>
