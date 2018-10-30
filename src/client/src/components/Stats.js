@@ -1,30 +1,36 @@
 import React from "react";
-import { makeData } from "./utils";
-import ReactTable from "react-table";
-import "react-table/react-table.css";
 import Prompt from "./Prompt";
 import Keys from "../Keys/Keys";
+import Stats from "./Stats";
 
-class Stats extends React.Component {
+class Page2 extends React.Component {
   constructor() {
     super();
     this.state = {
-      isAuthenticated: undefined,
-      data: makeData()
+      isAuthenticated: undefined
     };
   }
 
   myCallback = dataFromChild => {
     if (dataFromChild === Keys.PASSWORD) {
-      this.setState({
-        isAuthenticated: true
-      });
+      console.log('1');
+      fetch("https://jsonplaceholder.typicode.com/albums")
+        .then(response => response.json())
+        .then(data => this.setState({ isAuthenticated: true, data: data }));
     } else {
       this.setState({
         isAuthenticated: false
       });
     }
   };
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/albums")
+      .then(response => response.json())
+      .then(data => this.setState({ submitted: true, data: data }));
+    //console.log(this.state.data);
+    //event.preventDefault();
+  }
 
   render() {
     if (typeof this.state.isAuthenticated === "undefined") {
@@ -37,49 +43,12 @@ class Stats extends React.Component {
     if (this.state.isAuthenticated === false) {
       return <div>User unauthorised !!</div>;
     }
-    const { data } = this.state;
     return (
-      <div style={{ textAlign: "center", flow: "center" }} id="contact">
-        <div>
-          <ReactTable
-            data={data}
-            columns={[
-              {
-                columns: [
-                  {
-                    Header: "Word",
-                    accessor: "Word",
-                    Cell: props => (
-                      <div
-                        style={{
-                          fontSize: `${props.original.Occurance}` + "px"
-                        }}
-                      >
-                        {props.original.Word}
-                      </div>
-                    )
-                  },
-                  {
-                    Header: "Occurance",
-                    id: "Occurance",
-                    accessor: d => d.Occurance
-                  }
-                ]
-              }
-            ]}
-            defaultSorted={[
-              {
-                id: "Occurance",
-                desc: true
-              }
-            ]}
-            defaultPageSize={100}
-            className="-striped -highlight"
-          />
-        </div>
+      <div>
+        <Stats result={this.state.data}/>
       </div>
     );
   }
 }
 
-export default Stats;
+export default Page2;
