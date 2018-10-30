@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import Home from "./Home";
-import Stats from "./Stats";
+import Page1 from "./Page1";
+import Page2 from "./Page2";
 
 function Container({ location }) {
   return (
@@ -17,8 +17,8 @@ function Container({ location }) {
         >
           <section className="route-section">
             <Switch location={location}>
-              <Route exact path="/" component={Home} />
-              <Route path="/Stats" component={Stats} />
+              <Route exact path="/" component={Page1} />
+              <Route path="/Page2" component={Page2} />
             </Switch>
           </section>
         </CSSTransition>
