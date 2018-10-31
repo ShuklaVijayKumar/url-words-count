@@ -53,11 +53,11 @@ class Page1 extends React.Component {
               <label>
                 Please enter url below to calculate the word occurances
               </label>
+              <i>e.g. http://www.loyalbooks.com/download/text/Railway-Children-by-E-Nesbit.txt</i>
               <input
                 type="text"
                 className="form-control"
                 id="urlText"
-                value="http://www.loyalbooks.com/download/text/Railway-Children-by-E-Nesbit.txt"
                 placeholder="some url"
                 onChange={this.handleChange}
               />

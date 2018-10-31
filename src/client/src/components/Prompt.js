@@ -47,7 +47,7 @@ class Prompt extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <h4>Please enter the password</h4>
-            <input type="text" value="Password" ref="myInput" />
+            <input type="text"  ref="myInput" />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleClick}>OK</Button>

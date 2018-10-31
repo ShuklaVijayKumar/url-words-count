@@ -59,3 +59,5 @@ UI testing
 
 
 Page 2 functionality to ready total search statistics 
+
+UI validation
