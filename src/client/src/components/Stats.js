@@ -19,7 +19,7 @@ class Stats extends React.Component {
                     Cell: props => (
                       <div
                         style={{
-                          fontSize: `${props.original.count} px`
+                          fontSize: `${props.original.count>50?50:props.original.count}`+ 'px'
                         }}
                       >
                         {props.original.word}
