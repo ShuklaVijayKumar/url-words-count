@@ -38,7 +38,17 @@ run ->  npm run test
 
 run -> npm run build
 
+
 ## Start
+
+if docker doesn't open the below then navigate to src\client folder and 
+
+
+run -> npm install
+
+
+run -> npm start
+
 
 Browse to localhost:3000/
 
